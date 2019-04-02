@@ -10,6 +10,7 @@ The tool no one should ever use... ever.
 
 ### Installing
 ```
+$ cd dEep.fRIeD
 $ mkdir build
 $ cd build
 $ cmake ..
