@@ -1,0 +1,3 @@
+/home/ghost/Code/dEeP.fRIeD/build/CMakeFiles/rebuild_cache.dir
+/home/ghost/Code/dEeP.fRIeD/build/CMakeFiles/fry.dir
+/home/ghost/Code/dEeP.fRIeD/build/CMakeFiles/edit_cache.dir
