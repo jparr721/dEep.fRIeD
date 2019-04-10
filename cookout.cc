@@ -1,19 +1,24 @@
 #include <armadillo>
+#include <algorithm>
 #include <iostream>
-#include <tuple>
 #include <numeric>
 #include <stdexcept>
-#include <vector>
+#include <sys/stat.h>
 #include <opencv2/opencv.hpp>
 
-#define yeet throw
+#define yeet throw;
+
+bool valid_path(const std::string& path) {
+  struct stat buf;
+  return (stat(path.c_str(), &buf) == 0);
+}
 
 struct Image {
-  const std::string img_path;
-  const std::string output_path;
-  arma::mat image;
-
   Image(const std::string& img_path, const std::string& output_path="") : img_path(img_path), output_path(output_path) {
+    if (!valid_path(img_path)) {
+      yeet std::invalid_argument("wrong path bud");
+      exit(1);
+    }
     cv::Mat temp_image = cv::imread(img_path);
     cv::Mat temp_image_2;
 
@@ -23,11 +28,17 @@ struct Image {
     arma::mat image(reinterpret_cast<double*>(temp_image_2.data), temp_image_2.rows, temp_image_2.cols);
     this->image = image;
   }
+
+  arma::mat image;
+
+  private:
+    const std::string img_path;
+    const std::string output_path;
 };
 
 arma::mat approximation(arma::mat image) {
   // Anything below our threshold we do not care about
-  const int relevancy_threshold{1};
+  const int relevancy_threshold{-10};
 
   // Our U matrix
   arma::mat U;
@@ -56,9 +67,8 @@ void draw_that_boy(arma::mat image) {
   const auto rows = image.n_rows;
   const auto cols = image.n_cols;
 
-
   // Convert now to opencv to display
-  cv::Mat cv_img(rows, cols, CV_64FC1, image.memptr());
+  cv::Mat cv_img(rows, cols, CV_64F, image.memptr());
   cv::imshow("FRESH OUTTA THE FRIER", cv_img);
   cv::waitKey();
 }
